@@ -292,7 +292,7 @@
     <value>Password parameters that take in plaintext will expose passwords and compromise the security of your system.</value>
   </data>
   <data name="AvoidUsingPlainTextForPasswordError" xml:space="preserve">
-    <value>Parameter '{0}' should use SecureString, otherwise this will expose sensitive information. See ConvertTo-SecureString for more information.</value>
+    <value>Parameter '{0}' should not use String type but either SecureString or PSCredential, otherwise it increases the chance to to expose this sensitive information.</value>
   </data>
   <data name="AvoidUsingPlainTextForPasswordCommonName" xml:space="preserve">
     <value>Avoid Using Plain Text For Password Parameter</value>
@@ -778,7 +778,7 @@
     <value>Replace {0} with {1}</value>
   </data>
   <data name="AvoidUsingPlainTextForPasswordCorrectionDescription" xml:space="preserve">
-    <value>Set {0} type to SecureString</value>
+    <value>Set {0} type to {1}</value>
   </data>
   <data name="MissingModuleManifestFieldCorrectionDescription" xml:space="preserve">
     <value>Add {0} = {1} to the module manifest</value>
@@ -920,6 +920,18 @@
   </data>
   <data name="AvoidLongLinesError" xml:space="preserve">
     <value>Line exceeds the configured maximum length of {0} characters</value>
+  </data>
+  <data name="AvoidSemicolonsAsLineTerminatorsName" xml:space="preserve">
+    <value>AvoidSemicolonsAsLineTerminators</value>
+  </data>
+  <data name="AvoidSemicolonsAsLineTerminatorsCommonName" xml:space="preserve">
+    <value>Avoid semicolons as line terminators</value>
+  </data>
+  <data name="AvoidSemicolonsAsLineTerminatorsDescription" xml:space="preserve">
+    <value>Line should not end with a semicolon</value>
+  </data>
+  <data name="AvoidSemicolonsAsLineTerminatorsError" xml:space="preserve">
+    <value>Line ends with a semicolon</value>
   </data>
   <data name="PlaceOpenBraceName" xml:space="preserve">
     <value>PlaceOpenBrace</value>
@@ -1087,7 +1099,7 @@
     <value>For better readability and consistency, use the exact casing of the cmdlet/function/parameter.</value>
   </data>
   <data name="UseCorrectCasingError" xml:space="preserve">
-    <value>Cmdlet/Function/Parameter does not match its exact casing '{0}'.</value>
+    <value>Function/Cmdlet '{0}' does not match its exact casing '{1}'.</value>
   </data>
   <data name="UseCorrectCasingName" xml:space="preserve">
     <value>UseCorrectCasing</value>
@@ -1163,5 +1175,20 @@
   </data>
   <data name="AvoidMultipleTypeAttributesName" xml:space="preserve">
     <value>AvoidMultipleTypeAttributes</value>
+  </data>
+  <data name="AvoidUsingBrokenHashAlgorithmsCommonName" xml:space="preserve">
+    <value>Avoid Using Broken Hash Algorithms</value>
+  </data>
+  <data name="AvoidUsingBrokenHashAlgorithmsDescription" xml:space="preserve">
+    <value>Avoid using the broken algorithms MD5 or SHA-1.</value>
+  </data>
+  <data name="AvoidUsingBrokenHashAlgorithmsError" xml:space="preserve">
+    <value>The Algorithm parameter of cmdlet '{0}' was used with the broken algorithm '{1}'.</value>
+  </data>
+  <data name="AvoidUsingBrokenHashAlgorithmsName" xml:space="preserve">
+    <value>AvoidUsingBrokenHashAlgorithms</value>
+  </data>
+  <data name="UseCorrectCasingParameterError" xml:space="preserve">
+    <value>Parameter '{0}' of function/cmdlet '{1}' does not match its exact casing '{2}'.</value>
   </data>
 </root>

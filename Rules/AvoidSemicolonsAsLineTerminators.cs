@@ -3,41 +3,38 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 #if !CORECLR
 using System.ComponentModel.Composition;
 #endif
 using System.Globalization;
+using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
 
 namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
 {
     /// <summary>
-    /// AvoidLongLines: Checks for lines longer than 120 characters
+    /// AvoidSemicolonsAsLineTerminators: Checks for lines that end with a semicolon.
     /// </summary>
 #if !CORECLR
     [Export(typeof(IScriptRule))]
 #endif
-    public class AvoidLongLines : ConfigurableRule
+    public class AvoidSemicolonsAsLineTerminators : ConfigurableRule
     {
         /// <summary>
-        /// Construct an object of AvoidLongLines type.
+        /// Construct an object of AvoidSemicolonsAsLineTerminators type.
         /// </summary>
-        public AvoidLongLines()
-        { }
-
-        [ConfigurableRuleProperty(defaultValue: 120)]
-        public int MaximumLineLength { get; set; }
-
-        private readonly string[] s_lineSeparators = new[] { "\r\n", "\n" };
+        public AvoidSemicolonsAsLineTerminators()
+        {
+            Enable = false;
+        }
 
         /// <summary>
-        /// Analyzes the given ast to find violations.
+        /// Checks for lines that end with a semicolon.
         /// </summary>
         /// <param name="ast">AST to be analyzed. This should be non-null</param>
         /// <param name="fileName">Name of file that corresponds to the input AST.</param>
-        /// <returns>A an enumerable type containing the violations</returns>
+        /// <returns>The diagnostic results of this rule</returns>
         public override IEnumerable<DiagnosticRecord> AnalyzeScript(Ast ast, string fileName)
         {
             if (ast == null)
@@ -45,46 +42,68 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
                 throw new ArgumentNullException(nameof(ast));
             }
 
+
             var diagnosticRecords = new List<DiagnosticRecord>();
 
-            string[] lines = ast.Extent.Text.Split(s_lineSeparators, StringSplitOptions.None);
+            IEnumerable<Ast> assignmentStatements = ast.FindAll(item => item is AssignmentStatementAst, true);
 
-            for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
+            var tokens = Helper.Instance.Tokens;
+            for (int tokenIndex = 0; tokenIndex < tokens.Length; tokenIndex++)
             {
-                string line = lines[lineNumber];
 
-                if (line.Length <= MaximumLineLength)
+                var token = tokens[tokenIndex];
+                var semicolonTokenExtent = token.Extent;
+
+                var isSemicolonToken = token.Kind is TokenKind.Semi;
+                if (!isSemicolonToken)
                 {
                     continue;
                 }
 
-                int startLine = lineNumber + 1;
-                int endLine = startLine;
-                int startColumn = 1;
-                int endColumn = line.Length;
+                var isPartOfAnyAssignmentStatement = assignmentStatements.Any(assignmentStatement => (assignmentStatement.Extent.EndOffset == semicolonTokenExtent.StartOffset + 1));
+                if (isPartOfAnyAssignmentStatement)
+                {
+                    continue;
+                }
+
+                var nextTokenIndex = tokenIndex + 1;
+                var isNextTokenIsNewLine = tokens[nextTokenIndex].Kind is TokenKind.NewLine;
+                var isNextTokenIsEndOfInput = tokens[nextTokenIndex].Kind is TokenKind.EndOfInput;
+
+                if (!isNextTokenIsNewLine && !isNextTokenIsEndOfInput)
+                {
+                    continue;
+                }
 
                 var violationExtent = new ScriptExtent(
-                    new ScriptPosition(
-                        ast.Extent.File,
-                        startLine,
-                        startColumn,
-                        line
-                    ),
-                    new ScriptPosition(
-                        ast.Extent.File,
-                        endLine,
-                        endColumn,
-                        line
-                    ));
+                new ScriptPosition(
+                    ast.Extent.File,
+                    semicolonTokenExtent.StartLineNumber,
+                    semicolonTokenExtent.StartColumnNumber,
+                    semicolonTokenExtent.StartScriptPosition.Line
+                ),
+                new ScriptPosition(
+                    ast.Extent.File,
+                    semicolonTokenExtent.EndLineNumber,
+                    semicolonTokenExtent.EndColumnNumber,
+                    semicolonTokenExtent.EndScriptPosition.Line
+                ));
+
+                var suggestedCorrections = new List<CorrectionExtent>();
+                suggestedCorrections.Add(new CorrectionExtent(
+                            violationExtent,
+                            string.Empty,
+                            ast.Extent.File
+                        ));
 
                 var record = new DiagnosticRecord(
-                        String.Format(CultureInfo.CurrentCulture, 
-                            String.Format(Strings.AvoidLongLinesError, MaximumLineLength)),
+                        String.Format(CultureInfo.CurrentCulture, Strings.AvoidSemicolonsAsLineTerminatorsError),
                         violationExtent,
                         GetName(),
                         GetDiagnosticSeverity(),
                         ast.Extent.File,
-                        null
+                        null,
+                        suggestedCorrections
                     );
                 diagnosticRecords.Add(record);
             }
@@ -97,7 +116,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
         /// </summary>
         public override string GetCommonName()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.AvoidLongLinesCommonName);
+            return string.Format(CultureInfo.CurrentCulture, Strings.AvoidSemicolonsAsLineTerminatorsCommonName);
         }
 
         /// <summary>
@@ -105,7 +124,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
         /// </summary>
         public override string GetDescription()
         {
-            return string.Format(CultureInfo.CurrentCulture, Strings.AvoidLongLinesDescription);
+            return string.Format(CultureInfo.CurrentCulture, Strings.AvoidSemicolonsAsLineTerminatorsDescription);
         }
 
         /// <summary>
@@ -117,7 +136,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
                 CultureInfo.CurrentCulture,
                 Strings.NameSpaceFormat,
                 GetSourceName(),
-                Strings.AvoidLongLinesName);
+                Strings.AvoidSemicolonsAsLineTerminatorsName);
         }
 
         /// <summary>
@@ -132,7 +151,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
         /// Gets the severity of the returned diagnostic record: error, warning, or information.
         /// </summary>
         /// <returns></returns>
-        private DiagnosticSeverity GetDiagnosticSeverity()
+        public DiagnosticSeverity GetDiagnosticSeverity()
         {
             return DiagnosticSeverity.Warning;
         }
@@ -146,7 +165,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
         }
 
         /// <summary>
-        /// Retrieves the type of the rule, Builtin, Managed or Module.
+        /// Retrieves the type of the rule: builtin, managed, or module.
         /// </summary>
         public override SourceType GetSourceType()
         {

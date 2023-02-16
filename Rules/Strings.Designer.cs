@@ -19,7 +19,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -574,6 +574,42 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Avoid semicolons as line terminators.
+        /// </summary>
+        internal static string AvoidSemicolonsAsLineTerminatorsCommonName {
+            get {
+                return ResourceManager.GetString("AvoidSemicolonsAsLineTerminatorsCommonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line should not end with a semicolon.
+        /// </summary>
+        internal static string AvoidSemicolonsAsLineTerminatorsDescription {
+            get {
+                return ResourceManager.GetString("AvoidSemicolonsAsLineTerminatorsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line ends with a semicolon.
+        /// </summary>
+        internal static string AvoidSemicolonsAsLineTerminatorsError {
+            get {
+                return ResourceManager.GetString("AvoidSemicolonsAsLineTerminatorsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AvoidSemicolonsAsLineTerminators.
+        /// </summary>
+        internal static string AvoidSemicolonsAsLineTerminatorsName {
+            get {
+                return ResourceManager.GetString("AvoidSemicolonsAsLineTerminatorsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Avoid Using ShouldContinue Without Boolean Force Parameter.
         /// </summary>
         internal static string AvoidShouldContinueWithoutForceCommonName {
@@ -723,6 +759,42 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         internal static string AvoidUsernameAndPasswordParamsName {
             get {
                 return ResourceManager.GetString("AvoidUsernameAndPasswordParamsName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid Using Broken Hash Algorithms.
+        /// </summary>
+        internal static string AvoidUsingBrokenHashAlgorithmsCommonName {
+            get {
+                return ResourceManager.GetString("AvoidUsingBrokenHashAlgorithmsCommonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid using the broken algorithms MD5 or SHA-1..
+        /// </summary>
+        internal static string AvoidUsingBrokenHashAlgorithmsDescription {
+            get {
+                return ResourceManager.GetString("AvoidUsingBrokenHashAlgorithmsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Algorithm parameter of cmdlet &apos;{0}&apos; was used with the broken algorithm &apos;{1}&apos;..
+        /// </summary>
+        internal static string AvoidUsingBrokenHashAlgorithmsError {
+            get {
+                return ResourceManager.GetString("AvoidUsingBrokenHashAlgorithmsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AvoidUsingBrokenHashAlgorithms.
+        /// </summary>
+        internal static string AvoidUsingBrokenHashAlgorithmsName {
+            get {
+                return ResourceManager.GetString("AvoidUsingBrokenHashAlgorithmsName", resourceCulture);
             }
         }
         
@@ -1042,7 +1114,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set {0} type to SecureString.
+        ///   Looks up a localized string similar to Set {0} type to {1}.
         /// </summary>
         internal static string AvoidUsingPlainTextForPasswordCorrectionDescription {
             get {
@@ -1060,7 +1132,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; should use SecureString, otherwise this will expose sensitive information. See ConvertTo-SecureString for more information..
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; should not use String type but either SecureString or PSCredential, otherwise it increases the chance to to expose this sensitive information..
         /// </summary>
         internal static string AvoidUsingPlainTextForPasswordError {
             get {
@@ -2572,7 +2644,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cmdlet/Function/Parameter does not match its exact casing &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Function/Cmdlet &apos;{0}&apos; does not match its exact casing &apos;{1}&apos;..
         /// </summary>
         internal static string UseCorrectCasingError {
             get {
@@ -2586,6 +2658,15 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer {
         internal static string UseCorrectCasingName {
             get {
                 return ResourceManager.GetString("UseCorrectCasingName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; of function/cmdlet &apos;{1}&apos; does not match its exact casing &apos;{2}&apos;..
+        /// </summary>
+        internal static string UseCorrectCasingParameterError {
+            get {
+                return ResourceManager.GetString("UseCorrectCasingParameterError", resourceCulture);
             }
         }
         

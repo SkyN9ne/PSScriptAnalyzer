@@ -391,6 +391,18 @@ bar
 foo |
     bar
 '@
+            },
+            @{ IdempotentScriptDefinition = @'
+foo |
+    bar -Parameter1
+'@
+            },
+            @{ IdempotentScriptDefinition = @'
+Get-TransportRule |
+Where-Object @{ $_.name -match "a"} |
+Select-Object @{ E = $SenderDomainIs | Sort-Object }
+Foreach-Object { $_.FullName }
+'@
             }
             ) {
         param ($IdempotentScriptDefinition)
@@ -398,6 +410,20 @@ foo |
         $settings.Rules.PSUseConsistentIndentation.PipelineIndentation = 'None'
         Invoke-Formatter -ScriptDefinition $IdempotentScriptDefinition -Settings $settings | Should -Be $idempotentScriptDefinition
     }
+
+        It 'Should preserve script when using PipelineIndentation IncreaseIndentationAfterEveryPipeline' -TestCases @(
+            @{ PipelineIndentation = 'IncreaseIndentationForFirstPipeline' }
+            @{ PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline' }
+            ) {
+        param ($PipelineIndentation)
+            $IdempotentScriptDefinition = @'
+Get-TransportRule |
+    Select-Object @{ Key = $SenderDomainIs | Sort-Object }
+baz
+'@
+            $settings.Rules.PSUseConsistentIndentation.PipelineIndentation = $PipelineIndentation
+            Invoke-Formatter -ScriptDefinition $IdempotentScriptDefinition -Settings $settings | Should -Be $idempotentScriptDefinition
+        }
 
         It "Should preserve script when using PipelineIndentation <PipelineIndentation>" -TestCases @(
                 @{ PipelineIndentation = 'IncreaseIndentationForFirstPipeline' }
@@ -491,7 +517,6 @@ foo |
             }
             Test-CorrectionExtentFromContent @params
         }
-
 
         It "Should indent properly after line continuation (backtick) character with pipeline" {
             $def = @'

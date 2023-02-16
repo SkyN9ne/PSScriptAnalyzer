@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.20.0</VersionPrefix>
-    <TargetFrameworks>netcoreapp3.1;net452</TargetFrameworks>
+    <VersionPrefix>1.21.0</VersionPrefix>
+    <TargetFrameworks>netcoreapp3.1;net462</TargetFrameworks>
     <AssemblyName>Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules</AssemblyName>
-    <AssemblyVersion>1.20.0</AssemblyVersion>
+    <AssemblyVersion>1.21.0</AssemblyVersion>
     <PackageId>Rules</PackageId>
     <RootNamespace>Microsoft.Windows.PowerShell.ScriptAnalyzer</RootNamespace> <!-- Namespace needs to match Assembly name for ressource binding -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- Needed in order for Pluralize.NET DLL to appear in bin folder - https://github.com/NuGet/Home/issues/4488 -->
@@ -13,21 +13,24 @@
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
     <ProjectReference Include="..\PSCompatibilityCollector\Microsoft.PowerShell.CrossCompatibility\Microsoft.PowerShell.CrossCompatibility.csproj" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <!--  The version of Newtonsoft.Json needs to be newer than the version in the oldest supported version of PowerShell 7: https://github.com/PowerShell/PowerShell/blob/v7.0.11/src/System.Management.Automation/System.Management.Automation.csproj#L15 -->
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
     <PackageReference Include="Microsoft.Management.Infrastructure" Version="2.0.0" />
     <PackageReference Include="Pluralize.NET" Version="1.0.2" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity.Design" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
